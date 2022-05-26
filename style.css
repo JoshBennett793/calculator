@@ -1,0 +1,119 @@
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	width: 100vw;
+}
+
+body {
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+#wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 315px;
+	height: 415px;
+}
+
+#calc-container {
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-rows: repeat(6, 1fr);
+	grid-template-areas: 
+	"display display display display"
+	"delete delete power divide"
+	"seven eight nine multiply"
+	"four five six subtract"
+	"one two three add"
+	"neg zero decimal operate";
+}
+
+#display {
+	grid-area: display;
+	border: 1px solid black;
+	background-color: rgb(63, 193, 150);
+}
+
+#delete {
+	grid-area: delete;
+}
+
+#power {
+	grid-area: power;
+}
+
+#divide {
+	grid-area: divide;
+}
+
+#multiply {
+	grid-area: multiply;
+}
+
+#subtract {
+	grid-area: subtract;
+}
+
+#add {
+	grid-area: add;
+}
+
+#operate {
+	grid-area: operate;
+}
+
+#neg {
+	grid-area: neg;
+}
+
+#decimal {
+	grid-area: decimal;
+}
+
+#nine {
+	grid-area: nine;
+}
+
+#eight {
+	grid-area: eight;
+}
+
+#seven {
+	grid-area: seven;
+}
+
+#six {
+	grid-area: six;
+}
+
+#five {
+	grid-area: five;
+}
+
+#four {
+	grid-area: four;
+}
+
+#three {
+	grid-area: three;
+}
+
+#two {
+	grid-area: two;
+}
+
+#one {
+	grid-area: one;
+}
+
+#zero {
+	grid-area: zero;
+}
+
