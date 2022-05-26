@@ -8,10 +8,13 @@ body {
 }
 
 body {
-display: flex;
-justify-content: center;
-align-items: center;
-background-image: url(calc-ya-later-bg-img.jpg);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-image: url(calc-ya-later-bg-img.jpg);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 #wrapper {
