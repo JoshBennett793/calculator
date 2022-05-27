@@ -54,7 +54,7 @@ body {
 .btn:hover {
 	color: rgb(202, 150, 73);
 	cursor: pointer;
-	transform: scale(1.1);
+	transform: scale(1.05);
 }
 
 .num-btn:hover {
@@ -65,6 +65,7 @@ body {
 	grid-area: display;
 	height: 75px;
 	padding-right: 5px;
+	padding-bottom: 5px;
 	border-radius: 6px;
 	border: 2px solid rgb(110, 110, 110);
 	background-color: rgba(63, 193, 150, 0.848);
@@ -72,8 +73,7 @@ body {
 	
 	display: flex;
 	justify-content: flex-end;
-	align-items: center;
-	overflow: hidden; /*TODO change fontsize as text wraps*/
+	align-items: flex-end;
 	
 	font-size: 60px;
 }
