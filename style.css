@@ -51,10 +51,14 @@ body {
 	background-color: rgba(167, 182, 176, 0.573);
 }
 
+.selectedOperator {
+	color: rgb(202, 150, 73);
+	transform: scale(1.05);
+}
+
 .btn:hover {
 	color: rgb(202, 150, 73);
 	cursor: pointer;
-	transform: scale(1.05);
 }
 
 .num-btn:hover {

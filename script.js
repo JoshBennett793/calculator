@@ -1,3 +1,75 @@
+const displayDiv = document.getElementById("display");
+const numBtns = document.querySelectorAll(".num-btn");
+const operatorBtns = document.querySelectorAll(".operator");
+const deleteBtn = document.getElementById("delete");
+const clearBtn = document.getElementById("clear");
+const negativeBtn = document.getElementById("neg");
+const decimalBtn = document.getElementById("decimal");
+const operateBtn = document.getElementById("operate");
+
+let shouldClearAll = false;
+let shouldClearDisplay = false;
+
+let operation = {
+  evaluate(num1, operator, num2) {
+    operation.num_2 = Number(displayDiv.textContent);
+    console.log(operation.num_2);
+    operation.value = operate(operation);
+    displayValue();
+  },
+};
+
+numBtns.forEach((button) =>
+  button.addEventListener("click", () => appendNumber(button.textContent))
+);
+
+operatorBtns.forEach((btn) => {
+  btn.addEventListener("click", () => addOperator(btn));
+});
+
+deleteBtn.addEventListener("click", deleteNumber);
+clearBtn.addEventListener("click", clearAll);
+negativeBtn.addEventListener("click", NegativeSwitch);
+decimalBtn.addEventListener("click", addDecimal);
+
+function appendNumber(number) {
+  if (shouldClearDisplay) {
+    clearDisplay();
+    shouldClearDisplay = false;
+    displayDiv.textContent += number;
+  } else {
+    displayDiv.textContent += number;
+  }
+}
+
+function deleteNumber() {
+  displayDiv.textContent = displayDiv.textContent.slice(0, -1);
+}
+
+function clearAll() {
+  operation.num_1 = "";
+  operation.operator = "";
+  operation.num_2 = "";
+  delete operation.value;
+  displayDiv.textContent = "";
+  operatorBtns.forEach((btn) => btn.classList.remove("selectedOperator"));
+  shouldClearAll = false;
+}
+
+function NegativeSwitch() {
+  if (!displayDiv.textContent.includes("-")) {
+    displayDiv.textContent = displayDiv.textContent.replace(/^/, "-");
+  } else {
+    displayDiv.textContent = displayDiv.textContent.substring(1);
+  }
+}
+
+function addDecimal() {
+  if (!displayDiv.textContent.includes(".")) {
+    displayDiv.textContent = displayDiv.textContent.concat(".");
+  }
+}
+
 const add = (a, b) => a + b;
 
 const subtract = (a, b) => a - b;
@@ -6,59 +78,58 @@ const multiply = (a, b) => a * b;
 
 const divide = (a, b) => a / b;
 
-const sum = (arr) => arr.reduce((a, b) => a + b, 0);
-
 const power = (a, b) => a ** b;
 
-const operate = (num1, operator, num2) => {
-  if (operator === "/" && num2 === 0) {
-    return "lmao";
+function operate(obj) {
+  debugger;
+  if (obj.operator === "/" && obj.num_2 === 0) {
+    return obj.value = "calculating...";
   } else {
-    return operator === "+"
-      ? add(num1, num2)
-      : operator === "-"
-      ? subtract(num1, num2)
-      : operator === "*"
-      ? multiply(num1, num2)
-      : operator === "^"
-      ? power(num1, num2)
-      : operator === "/"
-      ? divide(num1, num2)
-      : alert("What are you doing?");
+    if (obj.operator === "+") {
+      return obj.value = add(obj.num_1, obj.num_2)
+    } else if (obj.operator === "-") {
+      return obj.value = subtract(obj.num_1, obj.num_2)
+    } else if (obj.operator === "x") {
+      return obj.value = multiply(obj.num_1, obj.num_2)
+    } else if (obj.operator === "^") {
+      return obj.value = power(obj.num_1, obj.num_2)
+    } else if (obj.operator === "/") {
+      return obj.value = divide(obj.num_1, obj.num_2)
+    } else {alert("How did you do that?");}
   }
-};
+}
 
-const displayDiv = document.getElementById("display");
+operateBtn.addEventListener("click", () =>
+  operation.evaluate(this.num_1, this.operator, this.num_2)
+);
 
-const numBtns = document.querySelectorAll(".num-btn");
-numBtns.forEach(btn => {
-  btn.addEventListener("click", event => {
-    displayDiv.textContent += event.target.textContent;
-  });
-});
+const displayValue = () => (displayDiv.textContent = operation.value);
 
-const deleteBtn = document.getElementById("delete");
-deleteBtn.addEventListener("click", () => {
-  displayDiv.textContent = displayDiv.textContent.slice(0, -1);
-});
+const clearDisplay = () => (displayDiv.textContent = "");
 
-const clearBtn = document.getElementById("clear");
-clearBtn.addEventListener("click", () => {
-  displayDiv.textContent = "";
-});
+function addOperator(btn) {
+  if (!btn.classList.contains("selectedOperator")) {
+    operatorBtns.forEach((btn) => btn.classList.remove("selectedOperator"));
+    btn.classList.add("selectedOperator");
+    operation.operator = btn.textContent;
 
-const negativeBtn = document.getElementById("neg");
-negativeBtn.addEventListener("click", () => {
-  if (!displayDiv.textContent.includes("-")) {
-    displayDiv.textContent = displayDiv.textContent.replace(/^/, "-");
-  } else {
-    displayDiv.textContent = displayDiv.textContent.substring(1);
+    console.log(operation);
+
+    operation.num_1 = Number(displayDiv.textContent);
+
+    console.log(operation);
+
+    shouldClearDisplay = true;
+  } else if ("value" in operation) {
+    operation.value = operation.evaluate();
+    displayValue();
+    operation.num_1 = operation.value;
+    delete operation.value;
+
+    operatorBtns.forEach((btn) => btn.classList.remove("selectedOperator"));
+    btn.classList.add("selectedOperator");
+    operation.operator = btn.textContent;
+
+    shouldClearDisplay = true;
   }
-});
-
-const decimalBtn = document.getElementById("decimal");
-decimalBtn.addEventListener("click", () => {
-  if (!displayDiv.textContent.includes(".")) {
-    displayDiv.textContent = displayDiv.textContent.concat(".");
-  }
-});
+}
