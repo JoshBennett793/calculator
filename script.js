@@ -9,6 +9,7 @@ const operateBtn = document.getElementById("operate");
 
 let shouldClearAll = false;
 let shouldClearDisplay = false;
+let option = false;
 
 let operation = {
   evaluate(num1, operator, num2) {
@@ -81,55 +82,56 @@ const divide = (a, b) => a / b;
 const power = (a, b) => a ** b;
 
 function operate(obj) {
-  debugger;
   if (obj.operator === "/" && obj.num_2 === 0) {
-    return obj.value = "calculating...";
+    return (obj.value = "calculating...");
   } else {
     if (obj.operator === "+") {
-      return obj.value = add(obj.num_1, obj.num_2)
+      return (obj.value = Math.round(add(obj.num_1, obj.num_2) * 1000) / 1000);
     } else if (obj.operator === "-") {
-      return obj.value = subtract(obj.num_1, obj.num_2)
+      return (obj.value =
+        Math.round(subtract(obj.num_1, obj.num_2) * 1000) / 1000);
     } else if (obj.operator === "x") {
-      return obj.value = multiply(obj.num_1, obj.num_2)
+      return (obj.value =
+        Math.round(multiply(obj.num_1, obj.num_2) * 1000) / 1000);
     } else if (obj.operator === "^") {
-      return obj.value = power(obj.num_1, obj.num_2)
+      return (obj.value =
+        Math.round(power(obj.num_1, obj.num_2) * 1000) / 1000);
     } else if (obj.operator === "/") {
-      return obj.value = divide(obj.num_1, obj.num_2)
-    } else {alert("How did you do that?");}
+      return (obj.value =
+        Math.round(divide(obj.num_1, obj.num_2) * 1000) / 1000);
+    } else {
+      alert("How did you do that?");
+    }
   }
 }
 
-operateBtn.addEventListener("click", () =>
+operateBtn.addEventListener("click", () => {
   operation.evaluate(this.num_1, this.operator, this.num_2)
-);
+  option = false;
+});
 
 const displayValue = () => (displayDiv.textContent = operation.value);
 
 const clearDisplay = () => (displayDiv.textContent = "");
 
 function addOperator(btn) {
-  if (!btn.classList.contains("selectedOperator")) {
+  if (!btn.classList.contains("selectedOperator") && option === false) {
     operatorBtns.forEach((btn) => btn.classList.remove("selectedOperator"));
     btn.classList.add("selectedOperator");
     operation.operator = btn.textContent;
-
-    console.log(operation);
-
     operation.num_1 = Number(displayDiv.textContent);
-
-    console.log(operation);
-
+    
     shouldClearDisplay = true;
-  } else if ("value" in operation) {
+    option = true;
+  } else if (option = true) {
     operation.value = operation.evaluate();
-    displayValue();
-    operation.num_1 = operation.value;
+    operation.num_1 = Number(displayDiv.textContent);
     delete operation.value;
-
+    
     operatorBtns.forEach((btn) => btn.classList.remove("selectedOperator"));
     btn.classList.add("selectedOperator");
     operation.operator = btn.textContent;
-
+   
     shouldClearDisplay = true;
   }
 }
