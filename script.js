@@ -7,9 +7,9 @@ const negativeBtn = document.getElementById("neg");
 const decimalBtn = document.getElementById("decimal");
 const operateBtn = document.getElementById("operate");
 
-let shouldClearAll = false;
 let shouldClearDisplay = false;
 let option = false;
+let maxed = "";
 
 let operation = {
   evaluate(num1, operator, num2) {
@@ -20,6 +20,11 @@ let operation = {
   },
 };
 
+deleteBtn.addEventListener("click", deleteNumber);
+clearBtn.addEventListener("click", clearAll);
+negativeBtn.addEventListener("click", NegativeSwitch);
+decimalBtn.addEventListener("click", addDecimal);
+
 numBtns.forEach((button) =>
   button.addEventListener("click", () => appendNumber(button.textContent))
 );
@@ -28,33 +33,66 @@ operatorBtns.forEach((btn) => {
   btn.addEventListener("click", () => addOperator(btn));
 });
 
-deleteBtn.addEventListener("click", deleteNumber);
-clearBtn.addEventListener("click", clearAll);
-negativeBtn.addEventListener("click", NegativeSwitch);
-decimalBtn.addEventListener("click", addDecimal);
+operateBtn.addEventListener("click", () => {
+  operation.evaluate(this.num_1, this.operator, this.num_2);
+  option = false;
+});
 
 function appendNumber(number) {
-  if (shouldClearDisplay) {
+  let displayContent = displayDiv.innerText;
+
+  /**
+   * Allows user to string together multiple operations even
+   * if display was maxed out
+   */
+  if (displayContent.length <= 9 && shouldClearDisplay) {
     clearDisplay();
     shouldClearDisplay = false;
     displayDiv.textContent += number;
+
+  // Limits user to 9 digits to prevent overflow
+  } else if (displayContent.length === 9) {
+    maxed = true;
+    return;
+
+  /**
+   * Handles all other instances where operand is < 9
+   */
   } else {
-    displayDiv.textContent += number;
+    if (shouldClearDisplay) {
+      clearDisplay();
+      shouldClearDisplay = false;
+      displayDiv.textContent += number;
+    } else {
+      displayDiv.textContent += number;
+    }
   }
 }
+
+const displayValue = () => (displayDiv.textContent = operation.value);
+
+const clearDisplay = () => (displayDiv.textContent = "");
 
 function deleteNumber() {
   displayDiv.textContent = displayDiv.textContent.slice(0, -1);
 }
 
 function clearAll() {
+
+  // Wipe all operation key values
   operation.num_1 = "";
   operation.operator = "";
   operation.num_2 = "";
-  delete operation.value;
+
+  // Clear display
   displayDiv.textContent = "";
+
+  // Removes styling
   operatorBtns.forEach((btn) => btn.classList.remove("selectedOperator"));
-  shouldClearAll = false;
+
+  // Resets booleans
+  shouldClearDisplay = false;
+  option = false;
 }
 
 function NegativeSwitch() {
@@ -100,38 +138,51 @@ function operate(obj) {
       return (obj.value =
         Math.round(divide(obj.num_1, obj.num_2) * 1000) / 1000);
     } else {
-      alert("How did you do that?");
+      return (obj.value = "error");
     }
   }
 }
 
-operateBtn.addEventListener("click", () => {
-  operation.evaluate(this.num_1, this.operator, this.num_2)
-  option = false;
-});
-
-const displayValue = () => (displayDiv.textContent = operation.value);
-
-const clearDisplay = () => (displayDiv.textContent = "");
-
 function addOperator(btn) {
-  if (!btn.classList.contains("selectedOperator") && option === false) {
+  if (option === false) {
+
+    // Remove styling if any and apply styling to selected operator
     operatorBtns.forEach((btn) => btn.classList.remove("selectedOperator"));
     btn.classList.add("selectedOperator");
+
+    // Assigns selected operator and current display content to first operand
     operation.operator = btn.textContent;
     operation.num_1 = Number(displayDiv.textContent);
-    
+
+    /** 
+     * Sets boolean that clears display if user begins 
+     * inputting digits after operator is selected
+     */
     shouldClearDisplay = true;
+
+    /**
+     * Allows user to continue inputting second operand
+     * if an operator is selected instead of "="
+     */
     option = true;
-  } else if (option = true) {
+    
+    /**
+     * Resets boolean which in turn allows user to add additional input
+     * after operator has been selected even if display was maxed out
+     */
+    maxed = false;
+
+  } else if (option === true) {
+
+    // Evaluate operation and assign return value to first operand.
     operation.value = operation.evaluate();
     operation.num_1 = Number(displayDiv.textContent);
-    delete operation.value;
     
     operatorBtns.forEach((btn) => btn.classList.remove("selectedOperator"));
     btn.classList.add("selectedOperator");
     operation.operator = btn.textContent;
-   
+
     shouldClearDisplay = true;
+    maxed = false;
   }
 }
